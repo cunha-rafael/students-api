@@ -1,0 +1,17 @@
+const express = require("express");
+
+const app = express();
+
+const PORT = 3000;
+
+app.get("/", function (req, res) {
+
+    res.send("API de alunos funcionando!");
+
+});
+
+app.listen(PORT, function () {
+
+    console.log(`Servidor rodando na porta ${PORT}`);
+
+});
