@@ -35,5 +35,5 @@ node server.js
 Servidor disponível em:
 
 ```text
-http://localhost:3000
+http://localhost:3000/students
 ```
