@@ -52,6 +52,25 @@ app.delete("/students/:id", function (req, res) {
 res.json(students);
 
 }); 
+
+app.put("/students/:id", function (req, res) {
+
+    const studentId = Number(req.params.id);
+
+    const student = students.find(function (student) {
+
+        return student.id === studentId;
+
+    });
+
+    student.nome = req.body.nome;
+
+    student.curso = req.body.curso;
+
+    res.json(student);
+
+});
+
 app.get("/", function (req, res) {
 
     res.send("API de alunos funcionando!");
