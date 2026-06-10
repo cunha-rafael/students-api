@@ -1,5 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
-
+const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
 
 async function getStudents(req, res) {
@@ -71,9 +71,55 @@ async function updateStudent(req, res) {
     }
 }
 
+function login(req, res) {
+
+    const { usuario, senha } = req.body;
+
+    if (usuario !== "admin" || senha !== "123456") {
+        return res.status(401).json({
+            erro: "Usuário ou senha inválidos"
+        });
+    }
+
+    const token = jwt.sign(
+        {
+            usuario: usuario
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: "1h"
+        }
+    );
+
+    res.json({
+        token
+    });
+}
+
 module.exports = {
     getStudents,
+    getStudentById,
     createStudent,
     deleteStudent,
-    updateStudent
+    updateStudent,
+    login
 };
+
+async function getStudentById(req, res) {
+
+    const studentId = Number(req.params.id);
+
+    const student = await prisma.student.findUnique({
+        where: {
+            id: studentId
+        }
+    });
+
+    if (!student) {
+        return res.status(404).json({
+            erro: "Aluno não encontrado"
+        });
+    }
+
+    res.json(student);
+}
