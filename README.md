@@ -1,39 +1,157 @@
 # Students API
 
-API simples de cadastro de alunos desenvolvida com Node.js e Express.
+API REST desenvolvida com Node.js, Express, PostgreSQL e Prisma ORM.
 
-## Tecnologias utilizadas
+## Sobre o Projeto
+
+Este projeto foi criado com o objetivo de praticar desenvolvimento backend utilizando tecnologias amplamente utilizadas no mercado.
+
+A API permite realizar operações de cadastro, consulta, atualização e remoção de alunos através de rotas REST.
+
+## Tecnologias Utilizadas
 
 * Node.js
 * Express
-* JavaScript
+* PostgreSQL
+* Prisma ORM
+* Git e GitHub
+* Postman
 
-## Objetivo
+## Funcionalidades
 
-Praticar:
+* Listar alunos
+* Cadastrar alunos
+* Atualizar alunos
+* Remover alunos
+* Validação de dados
+* Tratamento de erros
 
-* criação de servidor
-* rotas
-* APIs REST
-* CRUD
-* organização backend
+## Estrutura do Projeto
 
-## Como executar o projeto
+students-api/
+
+├── controllers/
+
+├── routes/
+
+├── prisma/
+
+├── server.js
+
+├── package.json
+
+└── README.md
+
+## Instalação
+
+Clone o repositório:
+
+git clone https://github.com/cunha-rafael/students-api.git
+
+Acesse a pasta:
+
+cd students-api
 
 Instale as dependências:
 
-```bash
 npm install
-```
+
+## Configuração do Banco de Dados
+
+Configure a variável DATABASE_URL no arquivo .env:
+
+DATABASE_URL="postgresql://usuario:senha@localhost:5432/studentsdb"
+
+Execute as migrations:
+
+npx prisma migrate dev
+
+Gere o Prisma Client:
+
+npx prisma generate
+
+## Executando o Projeto
 
 Inicie o servidor:
 
-```bash
 node server.js
-```
 
 Servidor disponível em:
 
-```text
-http://localhost:3000/students
-```
+http://localhost:3000
+
+## Rotas da API
+
+### Listar alunos
+
+GET /students
+
+### Cadastrar aluno
+
+POST /students
+
+Exemplo:
+
+{
+"nome": "Maria",
+"curso": "Engenharia"
+}
+
+### Atualizar aluno
+
+PUT /students/:id
+
+Exemplo:
+
+{
+"nome": "Maria Silva",
+"curso": "Ciência da Computação"
+}
+
+### Remover aluno
+
+DELETE /students/:id
+
+## Exemplos de Resposta
+
+Sucesso:
+
+[
+{
+"id": 1,
+"nome": "Maria",
+"curso": "Engenharia"
+}
+]
+
+Erro de validação:
+
+{
+"erro": "nome e curso são obrigatórios"
+}
+
+Aluno não encontrado:
+
+{
+"erro": "Aluno não encontrado"
+}
+
+## Aprendizados
+
+Durante o desenvolvimento deste projeto foram praticados conceitos como:
+
+* APIs REST
+* CRUD
+* PostgreSQL
+* Prisma ORM
+* Estruturação de projetos Node.js
+* Validação de dados
+* Tratamento de erros
+* Versionamento com Git e GitHub
+
+## Autor
+
+Rafael Cunha
+
+GitHub:
+https://github.com/cunha-rafael
