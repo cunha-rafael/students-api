@@ -10,49 +10,50 @@ async function getStudents(req, res) {
 
 }
 
-function createStudent(req, res) {
+async function createStudent(req, res) {
 
-    const newStudent = {
-        id: students.length + 1,
-        nome: req.body.nome,
-        curso: req.body.curso
-    };
-
-    students.push(newStudent);
+    const newStudent = await prisma.student.create({
+        data: {
+            nome: req.body.nome,
+            curso: req.body.curso
+        }
+    });
 
     res.status(201).json(newStudent);
 
 }
 
-function deleteStudent(req, res) {
+async function deleteStudent(req, res) {
 
     const studentId = Number(req.params.id);
 
-    students = students.filter(function (student) {
-
-        return student.id !== studentId;
-
+    await prisma.student.delete({
+        where: {
+            id: studentId
+        }
     });
 
-    res.json(students);
+    res.json({
+        mensagem: "Aluno removido com sucesso"
+    });
 
 }
 
-function updateStudent(req, res) {
+async function updateStudent(req, res) {
 
     const studentId = Number(req.params.id);
 
-    const student = students.find(function (student) {
-
-        return student.id === studentId;
-
+    const updatedStudent = await prisma.student.update({
+        where: {
+            id: studentId
+        },
+        data: {
+            nome: req.body.nome,
+            curso: req.body.curso
+        }
     });
 
-    student.nome = req.body.nome;
-
-    student.curso = req.body.curso;
-
-    res.json(student);
+    res.json(updatedStudent);
 
 }
 
