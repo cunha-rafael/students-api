@@ -1,17 +1,10 @@
-let students = [
-    {
-        id: 1,
-        nome: "Rafael",
-        curso: "ADS"
-    },
-    {
-        id: 2,
-        nome: "Maria",
-        curso: "Engenharia"
-    }
-];
+const { PrismaClient } = require("@prisma/client");
 
-function getStudents(req, res) {
+const prisma = new PrismaClient();
+
+async function getStudents(req, res) {
+
+    const students = await prisma.student.findMany();
 
     res.json(students);
 
