@@ -8,6 +8,7 @@ const {
     createStudent,
     deleteStudent,
     updateStudent,
+    register,
     login
 } = require("../controllers/studentController");
 
@@ -20,4 +21,5 @@ router.delete("/students/:id", authMiddleware, deleteStudent);
 
 router.put("/students/:id", authMiddleware, updateStudent);
 router.post("/login", login);
+router.post("/register", register);
 module.exports = router;

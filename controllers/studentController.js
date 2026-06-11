@@ -1,7 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
 const prisma = new PrismaClient();
-
+const bcrypt = require("bcrypt");
 async function getStudents(req, res) {
     const students = await prisma.student.findMany();
 
@@ -71,11 +71,65 @@ async function updateStudent(req, res) {
     }
 }
 
-function login(req, res) {
+async function register(req, res) {
 
-    const { usuario, senha } = req.body;
+    const { username, password } = req.body;
 
-    if (usuario !== "admin" || senha !== "123456") {
+    if (!username || !password) {
+        return res.status(400).json({
+            erro: "username e password são obrigatórios"
+        });
+    }
+
+    const userExists = await prisma.user.findUnique({
+        where: {
+            username
+        }
+    });
+
+    if (userExists) {
+        return res.status(400).json({
+            erro: "Usuário já existe"
+        });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await prisma.user.create({
+        data: {
+            username,
+            password: hashedPassword
+        }
+    });
+
+    res.status(201).json({
+        id: user.id,
+        username: user.username
+    });
+}
+
+async function login(req, res) {
+
+    const { username, password } = req.body;
+
+    const user = await prisma.user.findUnique({
+        where: {
+            username
+        }
+    });
+
+    if (!user) {
+        return res.status(401).json({
+            erro: "Usuário ou senha inválidos"
+        });
+    }
+
+    const passwordMatch = await bcrypt.compare(
+        password,
+        user.password
+    );
+
+    if (!passwordMatch) {
         return res.status(401).json({
             erro: "Usuário ou senha inválidos"
         });
@@ -83,7 +137,8 @@ function login(req, res) {
 
     const token = jwt.sign(
         {
-            usuario: usuario
+            id: user.id,
+            username: user.username
         },
         process.env.JWT_SECRET,
         {
@@ -102,6 +157,7 @@ module.exports = {
     createStudent,
     deleteStudent,
     updateStudent,
+    register,
     login
 };
 
