@@ -1,11 +1,31 @@
 const { PrismaClient } = require("@prisma/client");
 const jwt = require("jsonwebtoken");
-const prisma = new PrismaClient();
 const bcrypt = require("bcrypt");
+
+const prisma = new PrismaClient();
+
 async function getStudents(req, res) {
     const students = await prisma.student.findMany();
 
     res.json(students);
+}
+
+async function getStudentById(req, res) {
+    const studentId = Number(req.params.id);
+
+    const student = await prisma.student.findUnique({
+        where: {
+            id: studentId
+        }
+    });
+
+    if (!student) {
+        return res.status(404).json({
+            erro: "Aluno não encontrado"
+        });
+    }
+
+    res.json(student);
 }
 
 async function createStudent(req, res) {
@@ -72,7 +92,6 @@ async function updateStudent(req, res) {
 }
 
 async function register(req, res) {
-
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -109,7 +128,6 @@ async function register(req, res) {
 }
 
 async function login(req, res) {
-
     const { username, password } = req.body;
 
     const user = await prisma.user.findUnique({
@@ -160,22 +178,3 @@ module.exports = {
     register,
     login
 };
-
-async function getStudentById(req, res) {
-
-    const studentId = Number(req.params.id);
-
-    const student = await prisma.student.findUnique({
-        where: {
-            id: studentId
-        }
-    });
-
-    if (!student) {
-        return res.status(404).json({
-            erro: "Aluno não encontrado"
-        });
-    }
-
-    res.json(student);
-}
