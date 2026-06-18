@@ -12,6 +12,17 @@ const {
     login
 } = require("../controllers/studentController");
 
+/**
+ * @swagger
+ * /students:
+ *   get:
+ *     summary: Lista todos os alunos
+ *     tags: [Students]
+ *     responses:
+ *       200:
+ *         description: Lista de alunos retornada com sucesso
+ */
+
 router.get("/students", getStudents);
 router.get("/students/:id", getStudentById);
 
